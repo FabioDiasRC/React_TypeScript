@@ -1,0 +1,6 @@
+onClick = {handleClick} X onClick = {handleClick()}
+chamando da segunda forma ele executa a função diretamente quando carregado, da primeira forma ele executa apenas quando clicado 
+
+no react é melhor trabalhar com as variaveis e sua alterações, que o react modifica e altera apenas o que foi modificado, isso garante a melhor performance, para isso é necessario usar o state
+
+{age > 30 && "tenho mais de 30 anos"} modelo de condicional no react
