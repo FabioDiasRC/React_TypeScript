@@ -1,0 +1,4 @@
+Inicialmente é instalado o react, em sequencia é instalado o 'npm install styled-components' e depois 'npm install -D @types/styled-components', que vao permitir trabalhar os tipos do typescript
+
+import * as C from './App.styles' X import {container} from  './App.styles'
+Por que o primeiro tipo de importação é mais eficiente? conforme o aumento do projeto voce vai ter cada vez mais nomes dentro da importaçãp, ficando enviavel. Importando como C voce pode definir os nomes com  'C.', exemplo, <C.container>, tras o elemento estilizado chamado container
