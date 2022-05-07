@@ -2,3 +2,65 @@ Inicialmente é instalado o react, em sequencia é instalado o 'npm install styl
 
 import * as C from './App.styles' X import {container} from  './App.styles'
 Por que o primeiro tipo de importação é mais eficiente? conforme o aumento do projeto voce vai ter cada vez mais nomes dentro da importaçãp, ficando enviavel. Importando como C voce pode definir os nomes com  'C.', exemplo, <C.container>, tras o elemento estilizado chamado container
+
+------------Adendo - Typescript com React-------------------
+Deve-se passar um array em item, caso contrario ele nao aceitaria diversos objetos, aceitaria apenas um, ficando:
+
+  const [list, setList] = useState<Item>(
+    {id:1, name: 'tarefa1', done: false},
+  )
+
+passando o type de Item como um array, dentro do array passando os items da lista como objetos:
+
+  const [list, setList] = useState<Item[]>([
+      {id:1, name: 'tarefa1', done: false},
+      {id: 2, name: 'tarefa 2', done: false}
+    ])
+
+Sempre separe seus componentes para melhor organização do codigo como um todo, essa é a boa pratica a ser seguida em react. Como ja foi deifnido em 'item.ts' os tipos de cada variavel nao se repete, importa-se para o arquivo e aplica-se assim: 
+
+  import * as C from './style'
+  import { Item } from '../../types/item'
+
+  type Props = {
+    item: Item
+  }
+
+  const ListItem = ({item}: Props) => {
+    return (
+      <C.Container>
+        {item.name}
+      </C.Container>
+    )
+  }
+
+  export default ListItem;
+
+importante reaasaltar que a utiliazação desse item permite ja a importação direta para dentro do container.
+
+--------trabalhando com a captação do texto digitado--------
+para a captação precisa-se utilizar o useState, que vai permitir a constante atualização de uma variavel que vai armazenar os dados, assim como a função para trabalhar com essa variavel. Aplica-se tambem  o onKeyUp, função javascript criada para captar quando o enter é pressionado
+
+import { useState } from 'react'
+import * as C from './styles'
+
+export const AddArea = () => {
+
+  const [inputText, setInputext] = useState('')
+
+  return (
+    <C.Container>
+      <div className='image'>+</div>
+
+      <input
+        type='text'
+        placeholder='Adicione uma tarefa'
+        value={inputText}
+        onChange={e => setInputext(e.target.value)}
+        onKeyUp={}
+      />
+
+    </C.Container>
+  )
+}
+
