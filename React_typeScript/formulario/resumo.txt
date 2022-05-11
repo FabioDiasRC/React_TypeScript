@@ -1,0 +1,162 @@
+                Resumo formulario multi etapas
+
+
+
+----Pegando o nome digitado e aplicando na pagina-----------
+
+esse codigo tras a posibilidade da alteração do valor do setName, que sera alterado, por isso ele é invocado, com o botao chamando essa função no onchange. utiliza e para invocar o evento, o dispatch foi criado, o crtl+espaço ja mostra as importações possiveis. no caso sera o setName e depois o valor é passado para o payload. Importante: so é possivel acessar esse valor e altera-lo graças a utilização do chengeEvent e do <HTMLInputElement>. sem eles corretamente aplicados nao consegueria acessar o valor
+
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+      dispatch({
+        type: FormActions.setName,
+        payload: e.target.value
+      })
+    }
+
+-------------------------------------------------------------
+
+
+------Salvando o passo atual em que o usuario esta---------
+
+Definido pelo },[]} no codigo, que indica aonde deve ser atualizado o effect, que no caso esta sendo vazio. Quando a tela for carregada o payload vai receber o passo atual, com base no FormActions.setCurrentStep
+
+  useEffect (() => {
+    dispatch({
+      type: FormActions.setCurrentStep,
+      payload: 1
+    })
+  }, [])
+
+
+
+-----------------Trabalhando na tela 2---------------------
+O passo 2 - desenvolver os niveis que os programadores estao, selecionando entre as duas opções, cria-se o componente 'select option'
+cria-se o container, mais a chamada da estilização pelo styles.ts, depois deve-se importar o select option como componente, assim como passar as props de tudo o que é necessario para ele
+
+  <SelectOption
+    title='Sou iniciante'
+    description='Comecei  a programar a menos de 2 anos'
+    icon=':)'
+    selected={state.level === 0}
+  />
+
+define-se no index.tsx do componente <SelectOption/> e passa-se os tipos, por causa do typescript
+
+  type Props = {
+    title: string;
+    description: string;
+    icon: string;
+    selected: boolean;
+  }
+
+Agora fazer o funcionamento com base no clique, necessario marcar o item que ja esta no contexto, no caso o iniciante (0), utilizando 'selected={state.level === 0}', exemplificado dois codigos acima. Na estilização é passada o selected dentro do container, para trocarmos a borda e mostrar o que esta selecionado e o que nao esta
+em sequencia deve-se aplicar o onclick para esses componentes, sendo:
+
+  <SelectOption
+    title='Sou programador'
+    description='programo a 2 anos ou mais'
+    icon=':))'
+    selected={state.level === 1}
+    onClick = {()=>setLevel(0)}
+  />
+
+e deve-se desenvolver a função que sera aplicada no onclick, chamada de setLevel:
+
+  const setLevel = (level:number) => {
+      dispatch ({
+        type: FormActions.setLevel,
+        payload: level
+      })
+    }
+
+nessa função tem-se level que e um number, aplica o dispatch, o type sera o formactions.setLevel e o payload sera o level. Depois de passar esses fatores deve-se aplicar a execução dentro do SelectOption, como uma props. aplica-se o onclick nos types
+
+  type Props = {
+    title: string;
+    description: string;
+    icon: string;
+    selected: boolean;
+    onClick: () => void
+  }
+
+Tambem aplica-se o onclick como uma função e como uma parametro do SelectOption:
+
+  export const SelectOption = ({title, description, icon, selected, onClick}: Props) => {
+    return (
+      <C.Container onClick={onClick} selected = {selected}>
+        <C.Icon>{ icon}</C.Icon>
+        <C.Info>
+          <C.Title>{title}</C.Title>
+          <C.Description>{description}</C.Description>
+        </C.Info>
+      </C.Container>
+    )
+  }
+
+Agora vamos aproveitar o useEfeect para garantir que o nome exista corretamente dentro da pagina 2 de forma correta
+
+  useEffect(() => {
+      if (state.name === '') {
+        history('/')
+      } else {
+        dispatch({
+          type: FormActions.setCurrentStep,
+          payload: 2
+        })
+      }
+    }, [])
+
+
+Agora vamos importar o link do react router para fazer um botao de retorno. podia ate colocar um botao com um <a>, mas ai perderiamos o contexto e reiniciariamos a pag, que nao é a melhor pratica
+
+import { useNavigate, Link } from 'react-router-dom'
+
+esse link é responsavel por mudar a rota sem renderizar a tela, preservando o componente, logo o funcionamento interno é diferente
+
+
+-----------------Trabalhando na tela 3---------------------
+Sao adicionados novos  'labels' dentro das pags, para cada um desses requisitos (email e github), tambem sao criados as novas funções para lidarem com esses valores estipulados, sendo os labels: 
+
+  <label>
+    Qual seu email?
+    <input
+      type='email'
+      value={state.email}
+      onChange={handleEmailChange}
+    />
+  </label>
+
+  <label>
+    Qual seu GitHub?
+    <input
+      type='url'
+      value={state.github}
+      onChange={handleGithubChange}
+    />
+  </label>
+
+e as funções ficam:
+
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+      dispatch({
+        type: FormActions.setEmail,
+        payload: e.target.value
+      })
+    }
+
+    const handleGithubChange = (e: ChangeEvent<HTMLInputElement>) => {
+      dispatch({
+        type: FormActions.setGithub,
+        payload: e.target.value
+      })
+    }
+
+tambem é copiado o estilo de dos botoes para ficar melhor de visualizar
+
+
+----------Layout da lateral esquerda dp projeto--------------
+possivel ver o funcionamento das etapas, alterar a etapa que esta sendo trabalhada e o Layout
+como esses dados ficaram visiveis em todas as paginas ela deve ser trabalhada dentro do proprio tema (pasta theme), mas como sao diferente em 3 telas, so que a base do componente é a mesma, para evitar a repetição de codigo é criado um componente especifico 
+Criado o 'SidebarItem' ele carrega os valores as 3 vezes, agora trabalha-se o componente para aceitar como props os valores definidos e nao necessitar de repetição de codigo, assim como definir os tipos dentro do codigo (todo codigo em 'index.tsx' dentro de components/theme)
+
+
