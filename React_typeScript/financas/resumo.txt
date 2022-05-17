@@ -1,0 +1,49 @@
+começar montando a estrutura geral do projeto e depois suas funcionalifdades é uma das formas de se iniciar o projeto
+
+  export type Category = {
+    [tag: string]: {
+      title: string,
+      color: string,
+      expense: boolean
+    }
+  }
+
+esse tipo de declaração de type permite aceitar qualquer nome que sera passado dentro do nosso objeto, desde que respeite o modelo de tipo definido, tornando seguro e reutilizavel
+
+
+apos a definição das categorias em tipos em ts, a gente utiliza o list, que e mutavel durante o projeto, dentro de um useState, para ele poder ser alterado no processo do porgrama
+
+  const [list, setList] = useState(items)
+
+no caso o items ja é definido com os tipos, mas podemos add os 'types' fazendo: (nesse caso nao precisa) 
+
+  const [list, setList] = useState<Item[]>(items)
+
+na sequencia é criada o 'dateFilter.ts' em helpers, que vai auxiliar trabalhar com as datas e os filtros relativos a isso
+criada a função getCurrentMonth, aplica-se ela no use state que trabalha com as datas (entao, ela roda a função dentro do use state, que retorna a data do dia)
+  const [filterList, setFilteredList] = useState<Item[]>([])
+  const [currentMonth, setCurrentMonth] = useState(getCurrentMonth())
+
+agora para monitorar a lista, que no caso seria o mes atual utiliza-se o useEffect
+
+para o espaçamento dentro do styled component, podendo peagr a prop em si e trabalhar com ela criando um type especifico nessa prop.o codigo abaixo e definindo o type da props, a interrogação em 'width?:' garante que essa props é opcional
+
+  export const TableHeadColum = styled.th<{width?: number}>`
+
+Depois trabalhando com essa prop dentro da verificação de " ? :"
+
+  width: ${props => props.width ? `${props.width}px` : 'auto'}
+
+trabalhando com o date ja se permite executar a conta direta, nao necessitando da logica de programação especifica para trabalhar com os meses de extremos, como mes 1 e mes 12
+obs o virgula 1 é colocado para definir um dia de base uma vez que o date pede um dia, mas como o dia nao é exibido pode ser qualquer valor
+onMonthChange é onde é passada a segunda props para alterar a funçao quando o mes alterar
+
+  const handlePrevMonth = () => {
+    let [year, month] = currentMonth.split('-');
+    let currentDate = new Date(parseInt(year), parseInt(month)-1, 1);
+    currentDate.setMonth( currentDate.getMonth() - 1)
+
+    onMonthChange(`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}` )
+  }
+
+
