@@ -1,0 +1,5 @@
+inicio padrao
+definição de um App styles para aplicar o styled components, depois aplica-se a cor de fundo no container e o mapa na div map
+depois de definir o boneco em components/character a gente precisa definir os eixos x e y dele, devido a necessidade de informação da localizaçao do boneco e para o lado que ele esta virado, tambem  necessario para o POO;
+
+
